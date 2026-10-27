@@ -2,6 +2,18 @@
 
 Newest first. Devices only; testers are not named here.
 
+## 2026-10-27 — Test build 948b9cbc on org main 0f839bef (CI only, not device-tested)
+From the 19 logs and 149 messages since c19b5416 (10-25 to 10-27); 13 logs are from this test build, the others from DroidDeck PR #1587's test build and ASEbrahim's own DroidDeck Mali app:
+- **Auto left Malis with a Vulkan 1.1 driver with no GPU** (r32p1/r38: Retroid Pocket 4 Pro and Poco X3 GT G77, Galaxy S21 FE G78, Xiaomi 13T G610): Auto's stand-in turned on neither Venus nor the bridge below Vulkan 1.2, so a rolled-back or missing pair left the runtime's Turnip ("failed to find physical device"). Only Venus needs 1.2; the bridge runs on these drivers. Auto now uses the bridge there.
+- **JM pair on the G77** (RP4 Pro, Poco X3 GT): `KBASE_IOCTL_MEM_IMPORT failed: Cannot allocate memory`, then Zink can't allocate and Xwayland ends. Driver-side, open; Auto falls back to the bridge.
+- **Bridge on a G610 r32p1 driver** (Xiaomi 13T): the driver rejected both modifiers the backend offered for AR24, so gamescope ended at start. gamescope patch 0135 tries linear when it was offered.
+- **Galaxy S21 FE (G78), bridge:** Steam at about 5 fps, stalled after its update; on PR #1587's build with MaliBridge v0.5.4 the same phone reached Big Picture.
+- **Lenovo TB373FU (G615):** bridge, 1000xRESIST about 14 fps with 152 MB free and thermal status 3; with the G615 pair and the bridge both on, Xwayland ran out of GPU memory; Venus OpenGL in software (open).
+- **Pixel 8 Pro (G715), Venus with PanVK-kbase:** fine (glprobe OK); Need for Speed Underground 2 about 40 fps.
+- **Built:** org main 0f839bef merged into test/non-adreno-all (14 conflicts); Auto's Vulkan 1.1 stand-in; MaliBridge v0.5.3 → v0.5.4 (48477fe6); gamescope p23 (0135). Drivers unchanged: no new upstream releases (zenithblue main has newer commits but no release; its main did not build last round).
+- **Published 2026-10-27:** gamescope-3.16.29-p23-nonadreno (Droid-Deck/DroidDeck run 40504391709); the four signed APKs replaced in place on `droiddeck-test-non-adreno-all` (Test APK release run 40509773334, from Build APK 40507468037 on test/non-adreno-all @948b9cbc; the first Build APK 40505286127 failed one test harness after the merge, fixed in 948b9cbc). APK contents checked: Venus server and ICD, Mali layer, bridge server v0.5.4, glprobe, Xclipse layer, gamescope and its WSI layer identical to p23. Release notes and README updated in place.
+- Posted to the thread 2026-10-27 (BannerBot): coming-fixes card and one combined reply card to 14 testers.
+
 ## 2026-10-25 — Test build c19b5416 on DroidDeck 0.6.0+ (CI only, not device-tested)
 From the 31 logs and 419 messages since c5b25920 (10-19 to 10-24):
 - **Auto left Malis on the runtime's Turnip** ("failed to find physical device", Steam never starts): RP4 Pro (G77) after the JM pair's trial rolled back, Galaxy S21 Ultra (G78), Tab S11 Ultra (G925) and a Dimensity 8100 (G610). Fixed on the APK branch: Auto switches on its stand-in (Venus or the bridge) after a rollback, for a pair on the bad list, and when the driver list cannot be read.

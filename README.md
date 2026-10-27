@@ -6,13 +6,13 @@ Experimental community testing. Not an official DroidDeck release.
 - **Test build (APK):** [DroidDeck test build: non-Snapdragon](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/droiddeck-test-non-adreno-all), built from the branch [`test/non-adreno-all`](https://github.com/Droid-Deck/DroidDeck/tree/test/non-adreno-all) of [DroidDeck](https://github.com/Droid-Deck/DroidDeck)
 - **Drivers:** the [Releases page](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases) has one release per driver, replaced in place on every rebuild
 - **Progress and test results:** [PROGRESS_LOG.md](PROGRESS_LOG.md) and the test build's release notes
-- **Newest test build: `c19b5416`** (built on DroidDeck 0.6.0 and org main up to `c5d7cdc0`).
-  - Mali bridge updated to ASEbrahim's [MaliBridge](https://github.com/ASEbrahim/MaliBridge) v0.5.3 (older Malis get past "Starting display and audio" in Steam mode, OpenGL 4.6 on most Malis, Dimensity 9500 texture fixes).
-  - Auto never leaves a Mali on the runtime's Turnip ("failed to find physical device"): after a pair's trial rolls back, for a pair marked bad, and when the driver list can't be read, it switches on Mali (Venus) or the bridge.
-  - Under Auto the Mali display always uses the phone's own driver (a hand-imported PanVK display driver gave a black screen).
-  - gamescope p22: a game buffer with no backend modifier uses linear instead of asserting (NieR Replicant under Venus). Venus ICD on Mesa 26.2.5.
-  - Drivers: PanVK-kbase from zenithblue's 10-23 source + RC4 lowmem, JM v3.0 Android half, faux123 v1.0.0, RADV-Xclipse (upstream v1.8.0).
+- **Newest test build: `948b9cbc`** (built on DroidDeck org main up to `0f839bef`, 10-27).
+  - Mali bridge updated to ASEbrahim's [MaliBridge](https://github.com/ASEbrahim/MaliBridge) v0.5.4 (Dimensity 9500 texture fixes, OpenGL text fixes, fewer low-memory crashes, picture kept after a long background pause).
+  - Auto uses the Mali bridge on Malis whose driver reports Vulkan 1.1 (G77, G78, G610 on older drivers); before, it turned on neither Venus nor the bridge there ("failed to find physical device").
+  - gamescope p23: when the driver rejects every layout the backend offers for a flippable image, linear is tried instead of ending the session (Mali-G610 on the bridge).
+  - Drivers unchanged (no new upstream releases).
   - Earlier builds added:
+    - `c19b5416`: built on 0.6.0, MaliBridge v0.5.3, Auto's stand-in after a rollback / bad pair / unreadable list, the Mali display on the phone's own driver under Auto, gamescope p22, Mesa 26.2.5 Venus, PanVK-kbase 10-23 + RC4 lowmem, JM v3.0, faux123 v1.0.0, RADV-Xclipse v1.8.0
     - `c5b25920`: Auto reads the whole driver list, Venus instead of the bridge as Auto's stand-in, the bridge vkBeginCommandBuffer fix, the Venus mutex fix, Mali-G1 on Venus, low-memory notice, G615 1.1.5-FC, RADV-Xclipse v1.7.0
     - `c9ebb247`: G615 1.1.4-FC, PanVK-kbase rc3-lowmem, the 64-bit GPU address fix, screen-half libraries, driver **Update** button, bridge-to-PanVK fallback, black-screen reasons
     - `42fdbfe8`: the bridge safety net (a driver crash no longer closes the app), Venus OpenGL logging, the PowerVR overlay fix, the Xclipse label fix
@@ -38,7 +38,8 @@ Experimental community testing. Not an official DroidDeck release.
   - **Galaxy A15 (G57):** Skyrim and Salt and Sanctuary play on `42fdbfe8`; desktop mode on PanVK without Venus is smooth (50–60 fps).
   - **Black screen with a JM, G615 or G710 pair?** Set Display driver to the phone's own (System) driver and send the log.
   - **From logs on `c5b25920`:** Tomb Raider (2013) at 25–30 fps on a Redmi Note 14 Pro 5G (G615, PanVK G615 1.1.5-FC); Steam Big Picture on a Pixel 8 Pro (Venus); Venus OpenGL still falls back to software on a Tab S10 Ultra (G720), as on G615/G610.
-  - **Waiting on retests of `c19b5416`.**
+  - **From logs on `c19b5416`:** Need for Speed Underground 2 at about 40 fps on a Pixel 8 Pro (Venus); 1000xRESIST at about 14 fps on a Lenovo TB373FU (G615, bridge, low memory); the JM pair can't import Steam's screen buffers on two G77s.
+  - **Waiting on retests of `948b9cbc`.**
   - Full list in the test build's release notes.
 - **Get the test build only from the link above.** Other copies (for example on file-sharing sites) are not ours.
 
@@ -112,7 +113,7 @@ Parts the test build downloads by checksum (not for users to install by hand):
   - the Mali compatibility layer
 
   Built from David Cimo's sources by the test branch's CI.
-- **Patched gamescope** ([p22](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/gamescope-3.16.29-p22-nonadreno)): DroidDeck's gamescope with these additions:
+- **Patched gamescope** ([p23](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/gamescope-3.16.29-p23-nonadreno)): DroidDeck's gamescope with these additions:
   - a switch to turn off explicit sync on kernels that can't support it (Linux older than 6.6, and Mali)
   - David Cimo's patch for showing frames that arrive as plain shared-memory images (Venus)
   - running without `VK_EXT_robustness2`, which Venus doesn't offer on most Malis
@@ -122,6 +123,7 @@ Parts the test build downloads by checksum (not for users to install by hand):
   - using picture layouts the driver supports but doesn't mark as shareable (Mali bridge)
   - naming the connection that closed when it gives up with "IWaitable hung up"
   - using a plain (linear) layout when the screen backend offers none for a game's picture format, instead of crashing (Venus)
+  - trying a plain (linear) layout when the driver rejects every layout the backend offers, instead of ending the session (Mali bridge on an older G610 driver)
 - **Test APK signing:** `.github/workflows/test-apk-release.yml` signs a test-branch build into its four variants and replaces the release's APKs, all on GitHub.
 
 ## What this repo does
@@ -173,7 +175,7 @@ All driver and graphics work belongs to its authors. This repo only rebuilds the
 - **Mali (Venus):** [David Cimo](https://github.com/DavidCimo), [DavidCimo/droiddeck-mali](https://github.com/DavidCimo/droiddeck-mali)
   - the Venus port, the Mali compatibility layer, the Venus queue-submit fix, cached frame readback, and the gamescope shared-memory patch
 - **PowerVR and Xclipse through the phone's own driver:** [wallentx](https://github.com/wallentx), [PR #570](https://github.com/Droid-Deck/DroidDeck/pull/570); Xclipse support in it by [stefanz92](https://github.com/stefanz92)
-- **Mali bridge:** [ASEbrahim](https://github.com/ASEbrahim), [PR #517](https://github.com/Droid-Deck/DroidDeck/pull/517); the test build carries his [MaliBridge](https://github.com/ASEbrahim/MaliBridge) (GPL-3.0) as a submodule, now v0.5.3
+- **Mali bridge:** [ASEbrahim](https://github.com/ASEbrahim), [PR #517](https://github.com/Droid-Deck/DroidDeck/pull/517); the test build carries his [MaliBridge](https://github.com/ASEbrahim/MaliBridge) (GPL-3.0) as a submodule, now v0.5.4
 - **Compositor safety fixes and Pixel compatibility tools:** [Leask](https://github.com/Leask), [PR #560](https://github.com/Droid-Deck/DroidDeck/pull/560), [#561](https://github.com/Droid-Deck/DroidDeck/pull/561), [#602](https://github.com/Droid-Deck/DroidDeck/pull/602)
 
 **Foundations**
