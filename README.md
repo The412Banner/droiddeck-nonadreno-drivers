@@ -6,12 +6,13 @@ Experimental community testing. Not an official DroidDeck release.
 - **Test build (APK):** [DroidDeck test build: non-Snapdragon](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/droiddeck-test-non-adreno-all), built from the branch [`test/non-adreno-all`](https://github.com/Droid-Deck/DroidDeck/tree/test/non-adreno-all) of [DroidDeck](https://github.com/Droid-Deck/DroidDeck)
 - **Drivers:** the [Releases page](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases) has one release per driver, replaced in place on every rebuild
 - **Progress and test results:** [PROGRESS_LOG.md](PROGRESS_LOG.md) and the test build's release notes
-- **Newest test build: `948b9cbc`** (built on DroidDeck org main up to `0f839bef`, 10-27).
-  - Mali bridge updated to ASEbrahim's [MaliBridge](https://github.com/ASEbrahim/MaliBridge) v0.5.4 (Dimensity 9500 texture fixes, OpenGL text fixes, fewer low-memory crashes, picture kept after a long background pause).
-  - Auto uses the Mali bridge on Malis whose driver reports Vulkan 1.1 (G77, G78, G610 on older drivers); before, it turned on neither Venus nor the bridge there ("failed to find physical device").
-  - gamescope p23: when the driver rejects every layout the backend offers for a flippable image, linear is tried instead of ending the session (Mali-G610 on the bridge).
-  - Drivers unchanged (no new upstream releases).
+- **Newest test build: `cadef0c0`** (built on DroidDeck 0.6.7 and org main up to `7bc35297`, 10-30).
+  - The Linux runtime is now Ubuntu 26.04 LTS (DroidDeck 0.6.7); every driver's Linux half here was checked against it (all the libraries it needs are in it, glibc 2.38 needed, 2.43 there).
+  - Mali bridge updated to ASEbrahim's [MaliBridge](https://github.com/ASEbrahim/MaliBridge) v0.5.4.2 (shared buffers without the handle type where only that passes the self-test, his older-Mali game-mode fix, the r38p1 beta driver erratum, a frame time limit).
+  - Drivers: PanVK-Mali-JM's Android half is FristOneRR v3.5; the faux123 pairs are v1.1.3. RADV-Xclipse-upstream stays v1.8.0 (v1.9.0-RC1 is experimental).
+  - gamescope p24: main's new patches plus this test's own, renumbered 0920-0935; no change in them.
   - Earlier builds added:
+    - `948b9cbc`: built on main 0f839bef, MaliBridge v0.5.4, Auto's bridge on Vulkan 1.1 Malis, gamescope p23 (linear when the driver rejects every offered layout)
     - `c19b5416`: built on 0.6.0, MaliBridge v0.5.3, Auto's stand-in after a rollback / bad pair / unreadable list, the Mali display on the phone's own driver under Auto, gamescope p22, Mesa 26.2.5 Venus, PanVK-kbase 10-23 + RC4 lowmem, JM v3.0, faux123 v1.0.0, RADV-Xclipse v1.8.0
     - `c5b25920`: Auto reads the whole driver list, Venus instead of the bridge as Auto's stand-in, the bridge vkBeginCommandBuffer fix, the Venus mutex fix, Mali-G1 on Venus, low-memory notice, G615 1.1.5-FC, RADV-Xclipse v1.7.0
     - `c9ebb247`: G615 1.1.4-FC, PanVK-kbase rc3-lowmem, the 64-bit GPU address fix, screen-half libraries, driver **Update** button, bridge-to-PanVK fallback, black-screen reasons
@@ -39,7 +40,8 @@ Experimental community testing. Not an official DroidDeck release.
   - **Black screen with a JM, G615 or G710 pair?** Set Display driver to the phone's own (System) driver and send the log.
   - **From logs on `c5b25920`:** Tomb Raider (2013) at 25–30 fps on a Redmi Note 14 Pro 5G (G615, PanVK G615 1.1.5-FC); Steam Big Picture on a Pixel 8 Pro (Venus); Venus OpenGL still falls back to software on a Tab S10 Ultra (G720), as on G615/G610.
   - **From logs on `c19b5416`:** Need for Speed Underground 2 at about 40 fps on a Pixel 8 Pro (Venus); 1000xRESIST at about 14 fps on a Lenovo TB373FU (G615, bridge, low memory); the JM pair can't import Steam's screen buffers on two G77s.
-  - **Waiting on retests of `948b9cbc`.**
+  - **From logs on `948b9cbc`:** Steam reaches its first frame on the bridge on a Galaxy S21 FE (G78); on r32p1 drivers (Poco X3 GT G77, Xiaomi 13T G610) the bridge cannot share one memory type with gamescope, so nothing reaches the screen (reported to ASEbrahim); on a Lenovo TB373FU (G615) Venus's OpenGL (Zink) does not load.
+  - **Waiting on retests of `cadef0c0`.**
   - Full list in the test build's release notes.
 - **Get the test build only from the link above.** Other copies (for example on file-sharing sites) are not ours.
 
@@ -84,18 +86,18 @@ Report results with **Setup > Share logs** in the DroidDeck Discord testing thre
 | **PanVK faux123 (GameForce Ace)** | GameForce Ace only (Mali-G610). Tuned and tested by the author on that handheld. | [source](https://github.com/faux123/panvk-faux123-driver-ace) · [Android releases](https://github.com/faux123/panvk-faux123-driver-ace/releases) | [release](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/panvk-faux123-ace) · [build](https://github.com/The412Banner/droiddeck-nonadreno-drivers/actions/workflows/faux123-mixed.yml) | faux123 (proof of concept, no support from the author) |
 | **PanVK faux123 (Anbernic RG556)** | Anbernic RG556 only (Unisoc T820, Mali-G57). Tuned and tested by the author on that handheld. | [source](https://github.com/faux123/panvk-faux123-driver-rg556) · [Android releases](https://github.com/faux123/panvk-faux123-driver-rg556/releases) | [release](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/panvk-faux123-rg556) · [build](https://github.com/The412Banner/droiddeck-nonadreno-drivers/actions/workflows/faux123-mixed.yml) | faux123 (proof of concept, no support from the author) |
 
-### Versions in the current releases (2026-10-25)
+### Versions in the current releases (2026-10-30)
 
 | Release | Linux half built from | Android half |
 |---|---|---|
 | `radv-xclipse` (default) | JimVulkan v1.6.0-RC (`05b3092`) | author's v1.6.0-RC |
 | `radv-xclipse-upstream` (manual) | JimVulkan v1.8.0 (`269238e`, Mesa 27.0.0-devel, Mesa overlay pinned at `45ea3ed`): v1.6.0's fixes, BC6H at half the memory (v1.7.0), BC6H/BC7 loading ~2x faster, the BC6H signed/unsigned lighting fix, unsigned BC4 at a third of the memory | author's v1.8.0 |
 | `panvk-mali-kbase` | zenithblue `9be6dd6` (10-23, csf-v11 through 222): Mali-G1-Ultra memory import fix, smaller tiler heaps and pools, X11 fixes, vkd3d fork-hang fix (main's patch 226 does not build for this profile yet) | author's RC4 lowmem (lowmem BC on by default) |
-| `panvk-mali-jm` | FristOneRR source beta 1.2.0 (`efd07ba`) | author's v3.0, plus the libraries it needs beside it |
+| `panvk-mali-jm` | FristOneRR source beta 1.2.0 (`efd07ba`) | author's v3.5, plus the libraries it needs beside it |
 | `panvk-mali-g720` | wonderkast02 g720-development (`ca16389`) | author's 0.1.0-beta.2 |
 | `panvk-mali-g615` | GunaCharanTeja 1.1.5-FC (`c52af8b`): 1.1.4-FC's Red Dead Redemption fault fixes and fewer queue stalls, plus BC textures at native size (BC1-3 to ETC2, BC4/5 to EAC) and faster BC6H/BC7 (`PANVK_BC_ETC=0` / `PANVK_BC_EAC=0` = 1.1.4 paths) | built here from the same tag, with libdrm_full beside it |
 | `panvk-mali-g710` | GunaCharanTeja `aa01eb0`, profile g610-v10-csf (same profile sources as `45071e8`: newer upstream work is all in the v11 series this profile does not use) | built here from the same source, with libdrm_full beside it |
-| `panvk-faux123-*` | our `panvk-mali-kbase` Linux half | faux123 v1.0.0 (one universal build, on zenithblue RC4 + his patches) |
+| `panvk-faux123-*` | our `panvk-mali-kbase` Linux half | faux123 v1.1.3 (one universal build, on zenithblue rc4 `5b87b74` + 76 of his patches) |
 
 Why two RADV builds: testers measured the final v1.6.0 about 30% slower in FauxVkTest than v1.6.0-RC, though Monster Hunter Rise reaches its menu on it. So v1.6.0-RC stays the default and the upstream build (now v1.8.0) is a manual pick. In the Linux half the author's `setprop` switches do not exist; use `RADV_XCLIPSE_BC7SRGB_RGBA8=1` and `RADV_XCLIPSE_BCSNORM_EXACT=1` instead.
 
@@ -113,7 +115,7 @@ Parts the test build downloads by checksum (not for users to install by hand):
   - the Mali compatibility layer
 
   Built from David Cimo's sources by the test branch's CI.
-- **Patched gamescope** ([p23](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/gamescope-3.16.29-p23-nonadreno)): DroidDeck's gamescope with these additions:
+- **Patched gamescope** ([p24](https://github.com/The412Banner/droiddeck-nonadreno-drivers/releases/tag/gamescope-3.16.29-p24-nonadreno); this test's patches are numbered 0920-0935, after DroidDeck's own): DroidDeck's gamescope with these additions:
   - a switch to turn off explicit sync on kernels that can't support it (Linux older than 6.6, and Mali)
   - David Cimo's patch for showing frames that arrive as plain shared-memory images (Venus)
   - running without `VK_EXT_robustness2`, which Venus doesn't offer on most Malis
@@ -159,7 +161,7 @@ All driver and graphics work belongs to its authors. This repo only rebuilds the
 - **PanVK G615 / G710:** [GunaCharanTeja](https://github.com/GunaCharanTeja/panvk-kbase-android), a fork of zenithblue-oss's project
 - **FristOneRR PanVK:** [FristOneRR](https://github.com/FristOneRR/FristOneRR-Panvk-Driver) ([source](https://github.com/FristOneRR-Admin/FristOneRR-Panvk-Source)), with work FristOneRR credits to Noysz, mexicanbr0auth, LukeValen and BossDrk
 - **PanVK G720:** [wonderkast02](https://github.com/wonderkast02/panvk-g720-kbase-csf)
-- **Device builds:** [faux123](https://github.com/faux123) for the Retroid Pocket 4 Pro, GameForce Ace and Anbernic RG556 (v1.0.0 is one build for all three)
+- **Device builds:** [faux123](https://github.com/faux123) for the Retroid Pocket 4 Pro, GameForce Ace and Anbernic RG556 (v1.1.3 is one build for all three)
 
 **Fixes borrowed into our driver builds**
 - **CSF provoking-vertex address fix** (`patches/panvk_csf_provoking_vertex_u64.py`, in every CSF PanVK build): found and proven on a Mali-G720 by [emirvapur11](https://github.com/emir34-34) in [emir34-34/DroidDeck commit 8f18a5ad](https://github.com/emir34-34/DroidDeck/commit/8f18a5ad) (repo GPL-3.0); port and write-up by [ryanistr](https://github.com/ryanistr) in [ryanistr/DroidDeck-Mali](https://github.com/ryanistr/DroidDeck-Mali/blob/main/tools/panvk-g57/patches/0004-csf-fix-provoking-vertex-fn-address-truncation.patch) (GPL-3.0). The change itself is a one-line Mesa (MIT) fix, matching upstream Mesa.
@@ -175,7 +177,7 @@ All driver and graphics work belongs to its authors. This repo only rebuilds the
 - **Mali (Venus):** [David Cimo](https://github.com/DavidCimo), [DavidCimo/droiddeck-mali](https://github.com/DavidCimo/droiddeck-mali)
   - the Venus port, the Mali compatibility layer, the Venus queue-submit fix, cached frame readback, and the gamescope shared-memory patch
 - **PowerVR and Xclipse through the phone's own driver:** [wallentx](https://github.com/wallentx), [PR #570](https://github.com/Droid-Deck/DroidDeck/pull/570); Xclipse support in it by [stefanz92](https://github.com/stefanz92)
-- **Mali bridge:** [ASEbrahim](https://github.com/ASEbrahim), [PR #517](https://github.com/Droid-Deck/DroidDeck/pull/517); the test build carries his [MaliBridge](https://github.com/ASEbrahim/MaliBridge) (GPL-3.0) as a submodule, now v0.5.4
+- **Mali bridge:** [ASEbrahim](https://github.com/ASEbrahim), [PR #517](https://github.com/Droid-Deck/DroidDeck/pull/517); the test build carries his [MaliBridge](https://github.com/ASEbrahim/MaliBridge) (GPL-3.0) as a submodule, now v0.5.4.2
 - **Compositor safety fixes and Pixel compatibility tools:** [Leask](https://github.com/Leask), [PR #560](https://github.com/Droid-Deck/DroidDeck/pull/560), [#561](https://github.com/Droid-Deck/DroidDeck/pull/561), [#602](https://github.com/Droid-Deck/DroidDeck/pull/602)
 
 **Foundations**
