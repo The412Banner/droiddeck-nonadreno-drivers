@@ -68,15 +68,15 @@
     "source": "https://github.com/FristOneRR-Admin/FristOneRR-Panvk-Source",
     "android": {
       "repo": "FristOneRR/FristOneRR-Panvk-Driver",
-      "asset": "Panvk-Mali-G57-.*\\.zip$",
-      "tag": "v3.0"
+      "asset": "PanVK-FristOneRR-V\\..*\\.zip$",
+      "tag": "v3.5"
     },
     "build": {
       "driver": "panvk",
       "src_repo": "FristOneRR-Admin/FristOneRR-Panvk-Source",
       "src_ref": "master"
     },
-    "note": "The Linux half is built from the newest public source (beta 1.2.0); the Android half is the official v3.0 release (D3D12 with Wrapper 3.0, black triangles fixed, G52 fixes, BC4-BC7 in the driver), pinned.",
+    "note": "The Linux half is built from the newest public source (beta 1.2.0); the Android half is the official v3.5 release (installs on Android 9 and newer, the 3.0 bugs fixed including wrong lighting and colours, faster Unreal Engine 3/4 games, ASTC/ETC1/ETC2 textures), pinned. The author recommends FristOneRR-Wrapper 3.0 for Android apps.",
     "tag": "panvk-mali-jm"
   },
   {
@@ -144,13 +144,13 @@
     "android": {
       "repo": "faux123/panvk-faux123-driver-rp4pro",
       "asset": "panvk_faux123_.*\\.adpkg\\.zip$",
-      "tag": "v1.0.0"
+      "tag": "v1.1.3"
     },
     "build": {
       "kind": "repack",
       "linux_from": "panvk-mali-kbase"
     },
-    "note": "Mixed pair. The Android half is faux123's own v1.0.0 build, unchanged: one universal driver for all his devices, built on zenithblue's RC4 plus 49 of his patches (faster in barrier-heavy scenes). His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
+    "note": "Mixed pair. The Android half is faux123's own v1.1.3 build, unchanged: one universal driver for all his devices (the same package in all his repositories), built on zenithblue's v0.1.0-rc4 (5b87b74) plus 76 of his patches. v1.1.3 fixes \"device lost\" from register spilling (WWE '12) and passes 1,674 Vulkan conformance tests with spilling forced. His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
   },
   {
     "id": "PanVK-faux123-Ace",
@@ -162,13 +162,13 @@
     "android": {
       "repo": "faux123/panvk-faux123-driver-ace",
       "asset": "panvk_faux123_.*\\.adpkg\\.zip$",
-      "tag": "v1.0.0"
+      "tag": "v1.1.3"
     },
     "build": {
       "kind": "repack",
       "linux_from": "panvk-mali-kbase"
     },
-    "note": "Mixed pair. The Android half is faux123's own v1.0.0 build, unchanged: one universal driver for all his devices, built on zenithblue's RC4 plus 49 of his patches (faster in barrier-heavy scenes). His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
+    "note": "Mixed pair. The Android half is faux123's own v1.1.3 build, unchanged: one universal driver for all his devices (the same package in all his repositories), built on zenithblue's v0.1.0-rc4 (5b87b74) plus 76 of his patches. v1.1.3 fixes \"device lost\" from register spilling (WWE '12) and passes 1,674 Vulkan conformance tests with spilling forced. His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
   },
   {
     "id": "PanVK-faux123-RG556",
@@ -180,12 +180,12 @@
     "android": {
       "repo": "faux123/panvk-faux123-driver-rg556",
       "asset": "panvk_faux123_.*\\.adpkg\\.zip$",
-      "tag": "v1.0.0"
+      "tag": "v1.1.3"
     },
     "build": {
       "kind": "repack",
       "linux_from": "panvk-mali-kbase"
     },
-    "note": "Mixed pair. The Android half is faux123's own v1.0.0 build, unchanged: one universal driver for all his devices, built on zenithblue's RC4 plus 49 of his patches (faster in barrier-heavy scenes). His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
+    "note": "Mixed pair. The Android half is faux123's own v1.1.3 build, unchanged: one universal driver for all his devices (the same package in all his repositories), built on zenithblue's v0.1.0-rc4 (5b87b74) plus 76 of his patches. v1.1.3 fixes \"device lost\" from register spilling (WWE '12) and passes 1,674 Vulkan conformance tests with spilling forced. His patches are in a private repo, so it cannot be rebuilt for Linux. The Linux half is our zenithblue PanVK-kbase build (same project, newer source)."
   }
 ]
