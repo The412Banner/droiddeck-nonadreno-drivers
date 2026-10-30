@@ -2,6 +2,11 @@
 
 Newest first. Devices only; testers are not named here.
 
+## 2026-10-30 — Round r13 on org main 7bc35297 (0.6.7+), IN PROGRESS (CI only, not device-tested)
+- **Why:** retest logs on 948b9cbc: the G77 (Poco X3 GT) and G610 (Xiaomi 13T) on r32p1 drivers now take the bridge and get past gamescope (0935 works) but stop at Steam's first frame: the bridge cannot share one memory type with gamescope (`a resource allowing server types 0x2 gets no client type`, VK_ERROR_INVALID_EXTERNAL_HANDLE; reported to ASEbrahim). S21 FE (G78, bridge) reaches Steam. Lenovo TB373FU (G615): Venus Zink fails to load, even in software. DroidDeck 0.6.7 is out.
+- **Done:** org main 7bc35297 merged into `test/non-adreno-all` (now cadef0c0; backup ref `refs/backup/20261030/test-non-adreno-all-before-r13` = 948b9cbc). gamescope: this branch's patches renumbered 0920-0935 after main's new 0121-0125 (same tree either order), `gamescope-3.16.29-p24-nonadreno` released and pinned. MaliBridge v0.5.4.2. Drivers: PanVK-Mali-JM Android half v3.5, faux123 pairs v1.1.3 (libraries match the authors' hashes); RADV-Xclipse-upstream stays v1.8.0 (v1.9.0-RC1 experimental, 960-only main fix). Every driver's Linux half finds its libraries in the Ubuntu 26.04 runtime (ubuntu-r1-rc3), glibc 2.38 needed vs 2.43 there.
+- **Open:** Build APK run 41130049558 (cadef0c0; the first, 41125749537, failed main's new SessionEndHintTest on a native call, fixed). Then APK contents check, signing, release notes, README, announcement.
+
 ## 2026-10-27 — Test build 948b9cbc on org main 0f839bef (CI only, not device-tested)
 From the 19 logs and 149 messages since c19b5416 (10-25 to 10-27); 13 logs are from this test build, the others from DroidDeck PR #1587's test build and ASEbrahim's own DroidDeck Mali app:
 - **Auto left Malis with a Vulkan 1.1 driver with no GPU** (r32p1/r38: Retroid Pocket 4 Pro and Poco X3 GT G77, Galaxy S21 FE G78, Xiaomi 13T G610): Auto's stand-in turned on neither Venus nor the bridge below Vulkan 1.2, so a rolled-back or missing pair left the runtime's Turnip ("failed to find physical device"). Only Venus needs 1.2; the bridge runs on these drivers. Auto now uses the bridge there.
